@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>نور الأبعاد (Noor3D) - المصحف التفاعلي المجسم</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Elegant Arabic Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&amp;family=Amiri:ital,wght@0,400;0,700;1,400&amp;family=Tajawal:wght@300;400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              850: '#064433',
+              950: '#02231a',
+            },
+            gold: {
+              300: '#f9e29d',
+              400: '#e5c464',
+              500: '#cba035',
+              600: '#9d771e'
+            }
+          },
+          fontFamily: {
+            sans: ['Tajawal', 'sans-serif'],
+            quran: ['"Amiri Quran"', '"Amiri"', 'serif'],
+            arabic: ['"Amiri"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for 3D Book Perspective, Glowing effects, and Glassmorphism -->
+<style data-purpose="custom-theme-effects">
+    body {
+      background-color: #031410;
+      background-image:
+        radial-gradient(at 50% 20%, rgba(16, 185, 129, 0.18) 0px, transparent 60%),
+        radial-gradient(at 80% 0%, rgba(203, 160, 53, 0.12) 0px, transparent 50%),
+        radial-gradient(at 20% 80%, rgba(5, 150, 105, 0.1) 0px, transparent 60%);
+      min-height: 100vh;
+      font-family: 'Tajawal', sans-serif;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* 3D Transform Space */
+    .perspective-container {
+      perspective: 1200px;
+      perspective-origin: center 40%;
+    }
+
+    .book-3d {
+      transform: rotateX(24deg) rotateY(-8deg) rotateZ(3deg);
+      transform-style: preserve-3d;
+      box-shadow:
+        -25px 35px 50px -10px rgba(0, 0, 0, 0.7),
+        0 15px 35px rgba(5, 150, 105, 0.25),
+        inset 0 0 40px rgba(180, 140, 75, 0.15);
+      transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .book-3d:hover {
+      transform: rotateX(20deg) rotateY(-4deg) rotateZ(1.5deg) scale(1.02);
+    }
+
+    /* Book Spine Depth */
+    .book-spine {
+      background: linear-gradient(90deg, #1e3a2f 0%, #0d231b 40%, #264a3d 100%);
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    /* Parchment Paper Texture */
+    .mushaf-paper {
+      background-color: #fcf8ee;
+      background-image:
+        radial-gradient(#e8ddc4 0.5px, transparent 0.5px),
+        linear-gradient(to right, rgba(0,0,0,0.08) 0%, transparent 6%, transparent 94%, rgba(0,0,0,0.08) 100%);
+      background-size: 16px 16px, 100% 100%;
+    }
+
+    /* Emerald Neon Highlight */
+    .active-ayah {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(52, 211, 153, 0.25), rgba(16, 185, 129, 0.15));
+      border: 1.5px solid rgba(16, 185, 129, 0.65);
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.35), inset 0 0 10px rgba(52, 211, 153, 0.2);
+    }
+
+    /* Glass Panels */
+    .glass-dark {
+      background: rgba(8, 30, 24, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(203, 160, 53, 0.2);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    /* Glow Elements */
+    .aurora-glow {
+      filter: blur(40px);
+      animation: pulseGlow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 0.45; transform: scale(0.95); }
+      100% { opacity: 0.8; transform: scale(1.08); }
+    }
+
+    /* Hide standard scrollbars */
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body class="text-slate-100 flex justify-center items-start min-h-screen p-0 sm:py-6">
+<!-- BEGIN: MobileDeviceFrame -->
+<main class="w-full max-w-[430px] min-h-[915px] bg-[#041a14] sm:rounded-[48px] overflow-hidden flex flex-col relative shadow-[0_25px_70px_rgba(0,0,0,0.8)] border border-emerald-900/60" data-purpose="mobile-viewport-container">
+<!-- Ambient Cosmic & Divine Lighting Aura -->
+<div aria-hidden="true" class="absolute top-10 left-1/2 -translate-x-1/2 w-80 h-72 bg-gradient-to-tr from-emerald-500/25 via-gold-400/20 to-teal-400/20 rounded-full aurora-glow pointer-events-none"></div>
+<!-- BEGIN: TopBar -->
+<header class="relative z-30 pt-4 px-4 pb-2" data-purpose="app-header">
+<!-- iOS Notch / Status Area -->
+<div class="flex justify-between items-center text-xs font-semibold text-emerald-200/70 mb-3 px-2">
+<span class="tracking-wider">9:41</span>
+<div class="flex items-center space-x-1.5 space-x-reverse">
+<i class="w-3.5 h-3.5" data-lucide="signal"></i>
+<i class="w-3.5 h-3.5" data-lucide="wifi"></i>
+<i class="w-4 h-4 text-gold-400" data-lucide="battery-charging"></i>
+</div>
+</div>
+<!-- Main Navigation Header -->
+<div class="flex items-center justify-between gap-2">
+<!-- Surah Info & Context -->
+<div class="flex items-center space-x-2.5 space-x-reverse">
+<button aria-label="قائمة السور والرجوع" class="w-10 h-10 rounded-2xl glass-dark flex items-center justify-center text-emerald-300 border border-emerald-500/30 hover:bg-emerald-800/40 active:scale-95 transition-all shadow-md">
+<i class="w-5 h-5 text-gold-400" data-lucide="layout-grid"></i>
+</button>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-xl font-bold tracking-tight text-white font-sans flex items-center gap-1.5">
+                سُورَةُ الرَّحْمَٰن
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+</h1>
+</div>
+<p class="text-[11px] text-emerald-300/80 font-medium">الجزء ٢٧ • الحزب ٥٣ • صفحة ٥٣١</p>
+</div>
+</div>
+<!-- Action Buttons: Immersive Galaxy & Voice Search -->
+<div class="flex items-center space-x-2 space-x-reverse">
+<!-- Immersive Mode Toggle -->
+<button class="px-3 py-1.5 rounded-full bg-gradient-to-r from-emerald-600/60 to-emerald-900/80 border border-gold-400/40 text-gold-300 flex items-center gap-1.5 text-xs shadow-lg hover:border-gold-300 transition-all active:scale-95" title="وضع الغطس الكوني">
+<i class="w-3.5 h-3.5 text-gold-300 animate-spin" data-lucide="sparkles" style="animation-duration: 8s;"></i>
+<span class="font-bold text-[11px]">الغطس 3D</span>
+</button>
+<!-- AI Voice Assistant Button -->
+<button aria-label="البحث الصوتي الذكي" class="w-10 h-10 rounded-2xl glass-dark flex items-center justify-center text-emerald-200 border border-emerald-500/30 hover:bg-emerald-800/40 active:scale-95 transition-all relative">
+<i class="w-5 h-5 text-emerald-300" data-lucide="mic"></i>
+<span class="absolute -top-0.5 -left-0.5 flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+</span>
+</button>
+</div>
+</div>
+<!-- Quick Environment Sound Selector Bar -->
+<div class="flex items-center justify-between mt-3 px-3 py-1.5 rounded-xl bg-emerald-950/60 border border-emerald-800/40 text-[11px] text-emerald-200/90">
+<div class="flex items-center gap-2">
+<i class="w-3.5 h-3.5 text-emerald-400" data-lucide="waves"></i>
+<span>البيئة الصوتية: <strong class="text-gold-300">سكينة الحرم والمطر</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-2 py-0.5 rounded-md bg-emerald-800/50 hover:bg-emerald-700 text-[10px] text-emerald-200">تبديل</button>
+<button aria-label="كتم" class="w-5 h-5 flex items-center justify-center text-emerald-300 hover:text-white"><i class="w-3.5 h-3.5" data-lucide="volume-2"></i></button>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: 3DInteractiveMushafScene -->
+<section class="relative flex-1 flex flex-col items-center justify-center px-3 py-2 z-10 perspective-container" data-purpose="3d-mushaf-viewport">
+<!-- 3D Book Container -->
+<div class="relative w-[345px] h-[375px] mushaf-paper rounded-2xl book-3d border-[4px] border-[#9c7526]/80 flex flex-col overflow-hidden select-none" data-purpose="3d-quran-book">
+<!-- Book Spine and Crease Highlight -->
+<div class="absolute left-0 top-0 bottom-0 w-6 book-spine z-20 opacity-45 pointer-events-none"></div>
+<div class="absolute left-6 top-0 bottom-0 w-3 bg-gradient-to-r from-black/25 to-transparent z-20 pointer-events-none"></div>
+<!-- Traditional Quranic Outer Border Pattern -->
+<div class="m-2.5 border-2 border-emerald-900/30 rounded-xl p-2.5 h-[calc(100%-20px)] flex flex-col justify-between relative bg-opacity-70">
+<!-- Surah Header Banner (Embossed Green/Gold Ornamental style) -->
+<div class="w-full bg-[#1b4437] text-gold-300 rounded-lg py-1.5 px-3 border border-gold-400/50 text-center shadow-sm relative overflow-hidden flex items-center justify-center">
+<div class="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px]"></div>
+<span class="text-xs text-gold-400 font-serif">۝</span>
+<span class="mx-2 text-sm font-bold tracking-wider font-quran text-gold-300">سُورَةُ الرَّحْمَٰنِ • مَكِّيَّة</span>
+<span class="text-xs text-gold-400 font-serif">۝</span>
+</div>
+<!-- Basmala -->
+<div class="text-center py-1 text-emerald-950 font-quran text-lg leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
+            بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
+          </div>
+<!-- Quranic Ayahs Flow -->
+<div class="space-y-2 text-gray-900 font-quran text-[17px] leading-[2.1] text-justify px-1" dir="rtl">
+<p>
+<span>ٱلرَّحْمَٰنُ </span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold-600/70 text-[11px] font-sans text-gold-700 bg-gold-400/10 mx-0.5">١</span>
+<span>عَلَّمَ ٱلْقُرْءَانَ </span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold-600/70 text-[11px] font-sans text-gold-700 bg-gold-400/10 mx-0.5">٢</span>
+<span>خَلَقَ ٱلْإِنسَٰنَ </span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold-600/70 text-[11px] font-sans text-gold-700 bg-gold-400/10 mx-0.5">٣</span>
+<!-- ACTIVE INTERACTIVE AYAH (Neon Emerald Halo) -->
+<span class="active-ayah rounded-md px-1.5 py-0.5 font-bold text-emerald-950 inline-block transition-all duration-300">
+                عَلَّمَهُ ٱلْبَيَانَ
+                <span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-emerald-600 text-[11px] font-sans text-emerald-900 bg-emerald-200 shadow-sm mx-1">٤</span>
+</span>
+<span>ٱلشَّمْسُ وَٱلْقَمَرُ بِحُسْبَانٍ </span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold-600/70 text-[11px] font-sans text-gold-700 bg-gold-400/10 mx-0.5">٥</span>
+<span>وَٱلنَّجْمُ وَٱلشَّجَرُ يَسْجُدَانِ </span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-gold-600/70 text-[11px] font-sans text-gold-700 bg-gold-400/10 mx-0.5">٦</span>
+</p>
+</div>
+<!-- Page Bottom Number -->
+<div class="flex justify-between items-center text-[10px] text-stone-500 pt-1 border-t border-stone-300/80 font-sans px-2">
+<span>الجزء ٢٧</span>
+<span class="font-bold text-stone-700 text-xs">٥٣١</span>
+<span>سورة الرحمن</span>
+</div>
+</div>
+<!-- 3D Depth Edges (Simulated stacked pages on bottom and side) -->
+<div class="absolute bottom-0 right-0 left-0 h-1.5 bg-gradient-to-b from-stone-300 to-stone-400 border-t border-stone-400"></div>
+</div>
+<!-- BEGIN: ActiveAyahFloatingGlassMenu -->
+<!-- Modern Glass Floating Palette directly interacting with active Ayah -->
+<div class="absolute bottom-6 w-[92%] glass-dark rounded-2xl p-2.5 border border-emerald-400/40 shadow-[0_12px_30px_rgba(0,0,0,0.6)] backdrop-blur-xl animate-fade-in z-30" data-purpose="ayah-action-menu">
+<div class="flex items-center justify-between pb-2 mb-1.5 border-b border-emerald-700/30 px-1">
+<span class="text-xs text-emerald-200 font-medium flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            الآية ٤: <span class="text-gold-300 font-quran">"عَلَّمَهُ ٱلْبَيَانَ"</span>
+</span>
+<div class="flex gap-1">
+<button class="px-2 py-0.5 rounded-full bg-emerald-800/60 text-gold-300 text-[10px] hover:bg-emerald-700">تفسير السعدي</button>
+</div>
+</div>
+<!-- Action Buttons Horizontal Grid -->
+<div class="grid grid-cols-5 gap-1.5 text-center">
+<!-- Button 1: Recitation -->
+<button class="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-emerald-800/40 active:scale-95 transition-all text-emerald-200 group">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/30 flex items-center justify-center text-emerald-300 group-hover:text-gold-300 mb-1 border border-emerald-500/20">
+<i class="w-4 h-4" data-lucide="volume-2"></i>
+</div>
+<span class="text-[10px]">استماع</span>
+</button>
+<!-- Button 2: Interactive Tafsir -->
+<button class="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-emerald-800/40 active:scale-95 transition-all text-emerald-200 group">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/30 flex items-center justify-center text-emerald-300 group-hover:text-gold-300 mb-1 border border-emerald-500/20">
+<i class="w-4 h-4" data-lucide="book-open-check"></i>
+</div>
+<span class="text-[10px]">تفسير 3D</span>
+</button>
+<!-- Button 3: AI Reflection & Meaning -->
+<button class="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-emerald-800/40 active:scale-95 transition-all text-emerald-200 group">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/30 flex items-center justify-center text-emerald-300 group-hover:text-gold-300 mb-1 border border-emerald-500/20">
+<i class="w-4 h-4" data-lucide="brain-circuit"></i>
+</div>
+<span class="text-[10px]">تدبر ذكي</span>
+</button>
+<!-- Button 4: Translation -->
+<button class="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-emerald-800/40 active:scale-95 transition-all text-emerald-200 group">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/30 flex items-center justify-center text-emerald-300 group-hover:text-gold-300 mb-1 border border-emerald-500/20">
+<i class="w-4 h-4" data-lucide="languages"></i>
+</div>
+<span class="text-[10px]">ترجمة</span>
+</button>
+<!-- Button 5: Share Card -->
+<button class="flex flex-col items-center justify-center p-1.5 rounded-xl hover:bg-emerald-800/40 active:scale-95 transition-all text-emerald-200 group">
+<div class="w-8 h-8 rounded-lg bg-emerald-600/30 flex items-center justify-center text-emerald-300 group-hover:text-gold-300 mb-1 border border-emerald-500/20">
+<i class="w-4 h-4" data-lucide="share-2"></i>
+</div>
+<span class="text-[10px]">مشاركة</span>
+</button>
+</div>
+</div>
+<!-- END: ActiveAyahFloatingGlassMenu -->
+</section>
+<!-- END: 3DInteractiveMushafScene -->
+<!-- BEGIN: VisualPerspectiveControls -->
+<div class="px-4 py-1.5 flex items-center justify-between text-xs text-emerald-300/80 z-20">
+<!-- 3D Zoom & Angle Controls -->
+<div class="flex items-center gap-1 bg-emerald-950/70 border border-emerald-800/50 rounded-full px-2.5 py-1">
+<button class="text-emerald-300 hover:text-white" title="تكبير 3D"><i class="w-3.5 h-3.5" data-lucide="zoom-in"></i></button>
+<span class="mx-1.5 text-[11px] text-gold-300 font-semibold">زاوية 3D</span>
+<button class="text-emerald-300 hover:text-white" title="تصغير"><i class="w-3.5 h-3.5" data-lucide="zoom-out"></i></button>
+</div>
+<!-- Turn Page Indicators -->
+<div class="flex items-center gap-3 text-xs">
+<button class="flex items-center gap-1 text-emerald-300 hover:text-gold-300 transition-colors">
+<i class="w-4 h-4" data-lucide="chevron-right"></i>
+<span>السابقة</span>
+</button>
+<span class="text-emerald-600">•</span>
+<button class="flex items-center gap-1 text-emerald-300 hover:text-gold-300 transition-colors">
+<span>التالية</span>
+<i class="w-4 h-4" data-lucide="chevron-left"></i>
+</button>
+</div>
+</div>
+<!-- END: VisualPerspectiveControls -->
+<!-- BEGIN: RecitationPlayerSheet -->
+<section class="mx-3 mt-1 mb-2 p-3 rounded-2xl bg-gradient-to-b from-[#092920]/90 to-[#051a14]/95 border border-emerald-500/30 shadow-lg relative z-20" data-purpose="audio-reciter-card">
+<!-- Top Row: Reciter Selection & Repeat Settings -->
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2.5">
+<div class="relative">
+<div class="w-10 h-10 rounded-full border border-gold-400/50 overflow-hidden bg-emerald-900 flex items-center justify-center shadow-inner">
+<i class="w-5 h-5 text-gold-300" data-lucide="user-check"></i>
+</div>
+<span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 border border-[#041a14] rounded-full"></span>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-100 flex items-center gap-1">
+              الشيخ مشاري راشد العفاسي
+              <i class="w-3 h-3 text-emerald-400 cursor-pointer" data-lucide="chevron-down"></i>
+</h4>
+<span class="text-[10px] text-emerald-300/80">رواية حفص عن عاصم • ترتيل مُجود</span>
+</div>
+</div>
+<!-- Repeat Ayah Option -->
+<div class="flex items-center gap-1.5 bg-emerald-900/40 px-2 py-1 rounded-lg border border-emerald-700/30 text-[10px] text-emerald-200">
+<i class="w-3 h-3 text-gold-400" data-lucide="repeat"></i>
+<span>تكرار الآية (٣x)</span>
+</div>
+</div>
+<!-- Middle: Audio Wave & Duration Slider -->
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-emerald-300/70">0:42</span>
+<div class="flex-1 relative h-1.5 bg-emerald-950 rounded-full overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-3/5 bg-gradient-to-r from-emerald-400 to-gold-400 rounded-full shadow-[0_0_8px_#34d399]"></div>
+</div>
+<span class="text-[10px] font-mono text-emerald-300/70">1:15</span>
+</div>
+<!-- Player Controls -->
+<div class="flex items-center justify-between px-3 pt-0.5">
+<button class="text-emerald-300/70 hover:text-white" title="تكرار السورة"><i class="w-4 h-4" data-lucide="shuffle"></i></button>
+<button class="text-emerald-200 hover:text-white" title="الآية السابقة"><i class="w-5 h-5" data-lucide="skip-forward"></i></button>
+<!-- Big Play/Pause Button with Emerald Glow -->
+<button aria-label="تشغيل / إيقاف" class="w-11 h-11 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-400 text-[#041a14] flex items-center justify-center shadow-[0_0_15px_rgba(52,211,153,0.6)] hover:scale-105 active:scale-95 transition-all">
+<i class="w-5 h-5 fill-current stroke-current" data-lucide="pause"></i>
+</button>
+<button class="text-emerald-200 hover:text-white" title="الآية التالية"><i class="w-5 h-5" data-lucide="skip-back"></i></button>
+<button class="text-emerald-300/70 hover:text-white" title="سرعة التلاوة 1.0x"><span class="text-xs font-semibold">1.0x</span></button>
+</div>
+</section>
+<!-- END: RecitationPlayerSheet -->
+<!-- BEGIN: BottomNavigationBar -->
+<nav class="relative z-30 mt-auto bg-[#031510]/95 border-t border-emerald-800/40 px-3 py-2" data-purpose="main-bottom-navigation">
+<div class="flex justify-around items-center">
+<!-- Tab 1: Dashboard / Home -->
+<button class="flex flex-col items-center text-emerald-400/60 hover:text-emerald-300 transition-colors py-1">
+<i class="w-5 h-5 mb-1" data-lucide="compass"></i>
+<span class="text-[10px] font-medium">الرئيسية</span>
+</button>
+<!-- Tab 2: 3D Mushaf (Active) -->
+<button class="flex flex-col items-center text-gold-300 relative py-1">
+<div class="w-8 h-8 rounded-xl bg-emerald-600/30 flex items-center justify-center border border-gold-400/40 shadow-[0_0_10px_rgba(203,160,53,0.3)] mb-0.5">
+<i class="w-4 h-4 text-gold-300" data-lucide="book-marked"></i>
+</div>
+<span class="text-[10px] font-bold text-gold-300">المصحف 3D</span>
+</button>
+<!-- Tab 3: Qibla & Prayer Times -->
+<button class="flex flex-col items-center text-emerald-400/60 hover:text-emerald-300 transition-colors py-1">
+<i class="w-5 h-5 mb-1" data-lucide="moon-star"></i>
+<span class="text-[10px] font-medium">المواقيت</span>
+</button>
+<!-- Tab 4: AI Quran Tutor -->
+<button class="flex flex-col items-center text-emerald-400/60 hover:text-emerald-300 transition-colors py-1">
+<div class="relative">
+<i class="w-5 h-5 mb-1" data-lucide="bot"></i>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-gold-400 rounded-full"></span>
+</div>
+<span class="text-[10px] font-medium">المعلم الذكي</span>
+</button>
+<!-- Tab 5: Profile & Hifdh -->
+<button class="flex flex-col items-center text-emerald-400/60 hover:text-emerald-300 transition-colors py-1">
+<i class="w-5 h-5 mb-1" data-lucide="award"></i>
+<span class="text-[10px] font-medium">حلقات الحفظ</span>
+</button>
+</div>
+<!-- iOS Home Indicator -->
+<div class="w-32 h-1 bg-emerald-700/40 rounded-full mx-auto mt-2"></div>
+</nav>
+<!-- END: BottomNavigationBar -->
+</main>
+<!-- END: MobileDeviceFrame -->
+<!-- Icon Rendering Script -->
+<script data-purpose="icon-initialization">
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
+</body></html>

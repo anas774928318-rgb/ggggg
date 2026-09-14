@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>نور الأبعاد (Noor3D) - القبة السماوية وبوصلة القبلة الكمية</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Config -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cosmic: {
+              950: '#040714',
+              900: '#080e21',
+              800: '#0f1b3d',
+              700: '#182b5c'
+            },
+            emeraldGlow: {
+              DEFAULT: '#10b981',
+              light: '#34d399',
+              dark: '#064e3b'
+            },
+            goldLeaf: {
+              DEFAULT: '#eab308',
+              light: '#fde047',
+              dark: '#a16207'
+            }
+          },
+          fontFamily: {
+            sans: ['SF Pro Display', 'Cairo', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            'dome-glow': '0 0 60px -15px rgba(52, 211, 153, 0.35), 0 0 40px -10px rgba(234, 179, 8, 0.25)',
+            'glass-inset': 'inset 0 1px 2px 0 rgba(255, 255, 255, 0.15)',
+            'qibla-beam': '0 0 25px rgba(52, 211, 153, 0.8), 0 0 50px rgba(16, 185, 129, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Google Fonts: Cairo -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Core Layout and Glassmorphism Styles -->
+<style data-purpose="base-layout">
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background-color: #030611;
+      overflow-x: hidden;
+    }
+    /* iOS Safe Area handling */
+    .pt-safe {
+      padding-top: env(safe-area-inset-top, 44px);
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 34px);
+    }
+  </style>
+<!-- Visual Effects and Animations -->
+<style data-purpose="cosmic-effects">
+    .cosmic-glass {
+      background: linear-gradient(135deg, rgba(16, 30, 66, 0.65) 0%, rgba(6, 14, 33, 0.75) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .glass-tab {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+    }
+
+    .glass-tab-active {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(234, 179, 8, 0.18) 100%);
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      box-shadow: 0 4px 20px -5px rgba(16, 185, 129, 0.3);
+    }
+
+    @keyframes pulseOrb {
+      0%, 100% { transform: scale(1) translateY(0); opacity: 0.9; }
+      50% { transform: scale(1.08) translateY(-4px); opacity: 1; }
+    }
+
+    @keyframes rotateCelestial {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes rotateCounter {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes laserPulse {
+      0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 8px #10b981); }
+      50% { opacity: 1; filter: drop-shadow(0 0 18px #34d399); }
+    }
+
+    .animate-celestial-slow {
+      animation: rotateCelestial 80s linear infinite;
+    }
+    .animate-celestial-reverse {
+      animation: rotateCounter 65s linear infinite;
+    }
+    .animate-laser {
+      animation: laserPulse 2.5s ease-in-out infinite;
+    }
+    .animate-pulse-orb {
+      animation: pulseOrb 4s ease-in-out infinite;
+    }
+
+    /* Horizontal scrollbar hiding */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-cosmic-950 text-slate-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+<!-- Mobile Device Shell (iPhone Pro Dimensions) -->
+<div class="relative w-full max-w-[430px] h-[932px] max-h-screen bg-cosmic-950 sm:rounded-[54px] overflow-hidden flex flex-col shadow-2xl border-0 sm:border-[8px] sm:border-slate-800/80">
+<!-- Deep Cosmic Ambient Glow Layers -->
+<div class="absolute -top-32 -right-32 w-80 h-80 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/3 -left-40 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="absolute bottom-20 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- BEGIN: TopBarAndNotch -->
+<header class="relative z-30 pt-safe px-6 pb-2 shrink-0">
+<!-- iOS Status Bar Placeholder -->
+<div class="flex justify-between items-center text-xs font-semibold text-slate-300 mb-2">
+<span class="tracking-wider text-sm">9:41</span>
+<div class="flex items-center space-x-2 space-x-reverse">
+<!-- Signal Icon -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25c-.2.2-.2.51 0 .71.2.2.51.2.71 0l1.24-.64C7.93 19.26 9.88 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"></path></svg>
+<!-- Wifi -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98A16.88 16.88 0 0012 4zm0 2.9c3.78 0 7.22 1.48 9.77 3.9L12 18.49 2.23 10.8C4.78 8.38 8.22 6.9 12 6.9z"></path></svg>
+<!-- Battery -->
+<div class="w-6 h-3 rounded-sm border border-slate-300 p-0.5 flex items-center">
+<div class="h-full w-4 bg-emerald-400 rounded-2xs"></div>
+</div>
+</div>
+</div>
+<!-- Main Navigation & Context Title -->
+<div class="flex items-center justify-between mt-1">
+<!-- Return / Mode Switcher -->
+<button aria-label="الرجوع" class="w-10 h-10 rounded-2xl cosmic-glass flex items-center justify-center text-slate-300 hover:text-white transition shadow-glass-inset">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Location and Spiritual Date -->
+<div class="text-center">
+<div class="flex items-center justify-center gap-1.5 text-emerald-300 font-bold text-base">
+<svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" fill-rule="evenodd"></path>
+</svg>
+<span>مكة المكرمة</span>
+<span class="text-xs font-normal text-slate-400 bg-white/5 px-2 py-0.5 rounded-full border border-white/5">المسجد الحرام</span>
+</div>
+<p class="text-[11px] text-slate-400 font-medium tracking-wide mt-0.5">
+            ١٤ رمضان ١٤٤٥ هـ • ٢٤ مارس ٢٠٢٤
+          </p>
+</div>
+<!-- Compass / Audio Notification Mode -->
+<button aria-label="الإشعارات والأذان" class="w-10 h-10 rounded-2xl cosmic-glass flex items-center justify-center text-goldLeaf-light transition shadow-glass-inset relative">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-2 left-2 w-2 h-2 bg-emerald-400 rounded-full ring-2 ring-cosmic-950"></span>
+</button>
+</div>
+</header>
+<!-- END: TopBarAndNotch -->
+<!-- BEGIN: MainScrollArea -->
+<main class="flex-1 overflow-y-auto no-scrollbar px-5 space-y-4 pb-24" data-purpose="primary-cosmic-viewport">
+<!-- BEGIN: NextPrayerCard -->
+<section class="cosmic-glass rounded-3xl p-4 shadow-glass-inset relative overflow-hidden border border-emerald-500/20" data-purpose="countdown-card">
+<div class="absolute -left-12 -top-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+<div class="flex items-center justify-between relative z-10">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+<span class="text-xs font-semibold uppercase tracking-wider text-emerald-300">الصلاة القادمة</span>
+</div>
+<h2 class="text-2xl font-black text-white mt-1">صلاة المغرب</h2>
+<p class="text-xs text-slate-300 mt-0.5">موعد الأذان: <span class="font-bold text-goldLeaf-light">06:34 م</span></p>
+</div>
+<!-- Circular Glowing Countdown -->
+<div class="flex flex-col items-center justify-center text-center bg-cosmic-900/80 px-4 py-2.5 rounded-2xl border border-white/10 shadow-inner">
+<span class="text-xs text-slate-400">متبقي للأذان</span>
+<div class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-goldLeaf-light tracking-widest font-mono mt-0.5">
+              -01:42:15
+            </div>
+<div class="text-[10px] text-emerald-400/90 font-medium">صوت أذان الحرم المكي</div>
+</div>
+</div>
+</section>
+<!-- END: NextPrayerCard -->
+<!-- BEGIN: CosmicDomeAndQuantumQibla -->
+<section class="relative flex flex-col items-center justify-center pt-2 pb-1" data-purpose="interactive-3d-dome">
+<!-- Viewport Switcher (3D Dome vs Augmented Reality) -->
+<div class="w-full flex justify-between items-center mb-2 px-1">
+<div class="inline-flex p-1 rounded-2xl bg-cosmic-900/90 border border-white/10 text-xs">
+<button class="px-3 py-1 rounded-xl text-white font-bold glass-tab-active transition text-[11px] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+              القبة الكونية
+            </button>
+<button class="px-3 py-1 rounded-xl text-slate-400 hover:text-white transition text-[11px]">
+              خريطة الإسقاط
+            </button>
+</div>
+<!-- AR Mode Trigger Button -->
+<button class="group cosmic-glass px-3.5 py-1.5 rounded-2xl border border-goldLeaf/30 flex items-center gap-2 text-xs font-bold text-goldLeaf-light hover:border-goldLeaf transition active:scale-95 shadow-glass-inset">
+<svg class="w-4 h-4 text-goldLeaf" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>كاميرا AR</span>
+</button>
+</div>
+<!-- 3D Celestial Dome Canvas Container -->
+<div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center my-1">
+<!-- Exterior Compass Ring with Azimuth Angles -->
+<div class="absolute inset-0 rounded-full border border-dashed border-emerald-500/25 animate-celestial-slow"></div>
+<div class="absolute inset-2 rounded-full border border-white/10 animate-celestial-reverse"></div>
+<!-- Degree Indicators / Cardinal Coordinates -->
+<span class="absolute top-1 text-[10px] font-bold text-emerald-400 tracking-wider">ش (0°)</span>
+<span class="absolute bottom-1 text-[10px] font-bold text-slate-500">ج (180°)</span>
+<span class="absolute right-2 text-[10px] font-bold text-slate-500">ق (90°)</span>
+<span class="absolute left-2 text-[10px] font-bold text-slate-500">غ (270°)</span>
+<!-- Celestial Sphere Background Globe Glow -->
+<div class="absolute inset-6 rounded-full bg-gradient-to-b from-cosmic-800 via-cosmic-900 to-cosmic-950 border border-emerald-400/30 shadow-dome-glow overflow-hidden">
+<!-- Simulated Constellations & Starfield -->
+<div class="absolute inset-0 opacity-40 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<!-- Sun & Moon Dual Orbit Lines -->
+<div class="absolute inset-4 rounded-full border border-goldLeaf/30 -rotate-45"></div>
+<!-- Sun Representation in Orbit -->
+<div class="absolute top-6 left-12 flex items-center gap-1">
+<div class="w-4 h-4 rounded-full bg-gradient-to-r from-amber-300 to-goldLeaf shadow-[0_0_12px_#fde047] animate-pulse"></div>
+<span class="text-[9px] text-amber-200 font-bold bg-black/40 px-1 rounded">الشمس</span>
+</div>
+<!-- Moon Representation in Orbit -->
+<div class="absolute bottom-9 right-12 flex items-center gap-1">
+<div class="w-3.5 h-3.5 rounded-full bg-slate-100 shadow-[0_0_10px_#ffffff] border border-cyan-200"></div>
+<span class="text-[9px] text-cyan-200 font-bold bg-black/40 px-1 rounded">القمر (بدر)</span>
+</div>
+<!-- Center Miniature Earth Hologram -->
+<div class="absolute inset-0 m-auto w-24 h-24 rounded-full bg-gradient-to-tr from-blue-900/80 via-emerald-950 to-cosmic-950 border border-emerald-400/40 flex items-center justify-center shadow-inner">
+<div class="w-16 h-16 rounded-full border border-dashed border-emerald-300/30 flex items-center justify-center animate-spin" style="animation-duration: 40s;">
+<div class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></div>
+</div>
+</div>
+</div>
+<!-- Quantum Holographic Qibla Vector (Laser to Kaaba) -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center rotate-[48deg] transform transition-all duration-700">
+<!-- Continuous Light-Guide Laser Beam -->
+<div class="w-1 h-36 bg-gradient-to-t from-transparent via-emerald-400 to-white -translate-y-16 animate-laser shadow-qibla-beam rounded-full"></div>
+<!-- Target Kaaba Node in 3D Perspective -->
+<div class="absolute top-2 -translate-x-0.5 flex flex-col items-center">
+<!-- Hologram Kaaba Icon -->
+<div class="relative w-8 h-8 rounded-lg bg-black border border-goldLeaf shadow-[0_0_20px_rgba(234,179,8,0.7)] flex items-center justify-center animate-pulse-orb">
+<div class="w-full h-1 bg-goldLeaf absolute top-2"></div>
+<span class="text-[9px] text-white font-bold">🕋</span>
+</div>
+<div class="text-[10px] font-black text-goldLeaf-light bg-black/80 px-2 py-0.5 rounded-full border border-goldLeaf/40 mt-1 shadow-md">
+                القبلة ٦٧°
+              </div>
+</div>
+</div>
+<!-- Compass Dial Hub -->
+<div class="absolute w-12 h-12 rounded-full cosmic-glass border border-white/20 flex flex-col items-center justify-center shadow-lg">
+<div class="w-3 h-3 rounded-full bg-gradient-to-r from-emerald-400 to-goldLeaf"></div>
+</div>
+</div>
+<!-- Quantum Precision Telemetry Bar -->
+<div class="w-full cosmic-glass rounded-2xl py-2 px-4 mt-2 flex items-center justify-around text-center border border-white/10 text-xs">
+<div>
+<div class="text-slate-400 text-[10px]">زاوية الانحراف</div>
+<div class="text-white font-mono font-bold text-sm">67.4° N</div>
+</div>
+<div class="h-6 w-px bg-white/10"></div>
+<div>
+<div class="text-slate-400 text-[10px]">المسافة المباشرة</div>
+<div class="text-emerald-300 font-mono font-bold text-sm">842 كم</div>
+</div>
+<div class="h-6 w-px bg-white/10"></div>
+<div>
+<div class="text-slate-400 text-[10px]">دقة المستشعر الكمي</div>
+<div class="text-goldLeaf font-bold text-xs flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 99.8%
+            </div>
+</div>
+</div>
+</section>
+<!-- END: CosmicDomeAndQuantumQibla -->
+<!-- BEGIN: PrayerTimelineSection -->
+<section class="space-y-2.5 pt-1" data-purpose="daily-prayer-schedule">
+<div class="flex items-center justify-between px-1">
+<h3 class="text-sm font-bold text-slate-200">أوقات الصلوات اليوم</h3>
+<span class="text-[11px] text-slate-400">طريقة أم القرى • الشروق 05:48 ص</span>
+</div>
+<!-- Prayers Grid / Cards -->
+<div class="grid grid-cols-5 gap-2">
+<!-- 1. Fajr (Passed) -->
+<div class="cosmic-glass rounded-2xl p-2.5 flex flex-col items-center text-center opacity-70 border border-white/5">
+<span class="text-[11px] font-medium text-slate-400">الفجر</span>
+<span class="text-xs font-mono font-bold text-slate-300 my-1">04:32</span>
+<svg class="w-3.5 h-3.5 text-emerald-400/80" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<!-- 2. Dhuhr (Passed) -->
+<div class="cosmic-glass rounded-2xl p-2.5 flex flex-col items-center text-center opacity-70 border border-white/5">
+<span class="text-[11px] font-medium text-slate-400">الظهر</span>
+<span class="text-xs font-mono font-bold text-slate-300 my-1">12:15</span>
+<svg class="w-3.5 h-3.5 text-emerald-400/80" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<!-- 3. Asr (Current Period) -->
+<div class="cosmic-glass rounded-2xl p-2.5 flex flex-col items-center text-center border border-white/20 bg-slate-800/40">
+<span class="text-[11px] font-semibold text-slate-300">العصر</span>
+<span class="text-xs font-mono font-bold text-white my-1">03:41</span>
+<span class="text-[9px] text-slate-400 bg-white/10 px-1 rounded-sm">الحالية</span>
+</div>
+<!-- 4. Maghrib (Next Active Prayer) -->
+<div class="relative cosmic-glass rounded-2xl p-2.5 flex flex-col items-center text-center border-2 border-emerald-400/80 bg-emerald-950/40 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+<span class="absolute -top-2 bg-emerald-500 text-cosmic-950 text-[9px] font-black px-1.5 py-0.2 rounded-full uppercase">القادمة</span>
+<span class="text-[11px] font-bold text-emerald-200 mt-1">المغرب</span>
+<span class="text-xs font-mono font-extrabold text-goldLeaf-light my-1">06:34</span>
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+</div>
+<!-- 5. Isha (Upcoming) -->
+<div class="cosmic-glass rounded-2xl p-2.5 flex flex-col items-center text-center border border-white/10">
+<span class="text-[11px] font-medium text-slate-400">العشاء</span>
+<span class="text-xs font-mono font-bold text-slate-300 my-1">08:04</span>
+<span class="text-[9px] text-slate-500">العشاء + التراويح</span>
+</div>
+</div>
+</section>
+<!-- END: PrayerTimelineSection -->
+<!-- BEGIN: CosmicAtmosphericBar -->
+<section class="cosmic-glass rounded-2xl p-3.5 flex items-center justify-between border border-white/10 text-xs" data-purpose="celestial-meditation">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600/30 to-goldLeaf/20 border border-white/10 flex items-center justify-center text-lg">
+            ✨
+          </div>
+<div>
+<div class="font-bold text-white text-xs">أذكار المساء وغروب الشمس</div>
+<div class="text-[10px] text-slate-400">تأمل في دوران الفلك وتنزّل السكينة</div>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/30 font-bold text-[11px] transition">
+          بدء الورد
+        </button>
+</section>
+<!-- END: CosmicAtmosphericBar -->
+</main>
+<!-- END: MainScrollArea -->
+<!-- BEGIN: BottomNavigationBar -->
+<nav class="absolute bottom-0 inset-x-0 cosmic-glass border-t border-white/10 pb-safe pt-2 px-6 z-40" data-purpose="main-navigation-dock">
+<div class="flex items-center justify-between max-w-sm mx-auto">
+<!-- Tab 1: المصحف (Home) -->
+<button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition py-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium">المصحف</span>
+</button>
+<!-- Tab 2: الاستماع (Audio) -->
+<button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition py-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium">التلاوات</span>
+</button>
+<!-- Tab 3: القبة والمواقيت (Active: Dome & Qibla) -->
+<button class="flex flex-col items-center gap-1 text-emerald-400 py-1 relative">
+<div class="relative">
+<svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2a10 10 0 1010 10A10.011 10.011 0 0012 2zm0 18a8 8 0 118-8 8.009 8.009 0 01-8 8zm.5-13h-1v5.25l4.5 2.67.5-.86-4-2.39z"></path>
+</svg>
+<span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-emerald-400 rounded-full shadow-[0_0_6px_#10b981]"></span>
+</div>
+<span class="text-[11px] font-bold text-emerald-300">القبلة والفلك</span>
+</button>
+<!-- Tab 4: الأذكار والحفظ (Hifdh & Adhkar) -->
+<button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition py-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium">المجتبى</span>
+</button>
+<!-- Tab 5: الملف والإعدادات (Profile) -->
+<button class="flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200 transition py-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium">حسابي</span>
+</button>
+</div>
+<!-- iOS Home Indicator Indicator Bar -->
+<div class="w-32 h-1 bg-slate-600/60 rounded-full mx-auto mt-3 mb-1"></div>
+</nav>
+<!-- END: BottomNavigationBar -->
+</div>
+<!-- Interactive Demo Logic for Dynamic Compass Orientation and Celestial Orbit Feedback -->
+<script data-purpose="interactive-qibla-handler">
+    document.addEventListener('DOMContentLoaded', () => {
+      // Mock gyroscope response for desktop preview demonstration
+      const domeContainer = document.querySelector('[data-purpose="interactive-3d-dome"]');
+      if (domeContainer) {
+        domeContainer.addEventListener('mousemove', (e) => {
+          const rect = domeContainer.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+
+          const tiltX = (y / rect.height) * -15;
+          const tiltY = (x / rect.width) * 15;
+
+          const globe = domeContainer.querySelector('.shadow-dome-glow');
+          if (globe) {
+            globe.style.transform = `perspective(600px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+          }
+        });
+
+        domeContainer.addEventListener('mouseleave', () => {
+          const globe = domeContainer.querySelector('.shadow-dome-glow');
+          if (globe) {
+            globe.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg)';
+            globe.style.transition = 'transform 0.5s ease';
+          }
+        });
+      }
+    });
+  </script>
+</body></html>
